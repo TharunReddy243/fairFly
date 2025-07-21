@@ -180,7 +180,7 @@ body {
   border-radius: 6px;
   transition: all 0.3s ease;
   z-index: 2;
-}
+}   
 
 .password-toggle:hover {
   color: #495057;
@@ -200,6 +200,7 @@ body {
   background: linear-gradient(135deg, #212529, #495057);
   color: white;
   border: none;
+  margin-top: 16px;
   padding: 16px;
   border-radius: 12px;
   font-size: 16px;
@@ -314,7 +315,7 @@ body {
 .search-container {
   max-width: 1200px;
   margin: 0 auto;
-  padding: 48px 20px;
+  padding: 18px 20px;
 }
 
 .search-header {
@@ -352,7 +353,7 @@ body {
   backdrop-filter: blur(20px);
   border: 1px solid rgba(0, 0, 0, 0.1);
   border-radius: 20px;
-  padding: 32px;
+  padding: 38.5px;
   box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
   transition: all 0.3s ease;
 }
@@ -420,7 +421,7 @@ body {
   display: grid;
   grid-template-columns: 1fr 1fr 1fr auto;
   gap: 16px;
-  align-items: end;
+  align-items: center;
   margin-bottom: 16px;
   padding: 20px;
   background: rgba(0, 0, 0, 0.03);
@@ -429,6 +430,7 @@ body {
 }
 
 .form-group {
+  margin-top: 16px;
   display: flex;
   flex-direction: column;
 }
@@ -442,7 +444,7 @@ body {
 
 .form-group input,
 .form-group select {
-  padding: 14px 14px 14px 44px;
+  padding: 14px 14px 14px 44px; 
   border: 1px solid rgba(0, 0, 0, 0.2);
   border-radius: 10px;
   font-size: 16px;
@@ -523,6 +525,7 @@ body {
   justify-content: center;
   cursor: pointer;
   transition: all 0.3s ease;
+  margin-top: 28px;
 }
 
 .remove-segment-btn:hover {
@@ -539,9 +542,9 @@ body {
 }
 
 .filter-toggle-btn {
-  background: #212529;
+    background: linear-gradient(135deg, #212529, #495057);
   color: white;
-  border: 1px solid #212529;
+  border: none;
   padding: 12px 20px;
   border-radius: 10px;
   font-size: 14px;
@@ -551,11 +554,12 @@ body {
   display: flex;
   align-items: center;
   gap: 8px;
+    box-shadow: 0 4px 20px rgba(33, 37, 41, 0.3);
 }
 
 .filter-toggle-btn:hover {
-  background: #495057;
-  border-color: #495057;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 30px rgba(33, 37, 41, 0.4);
 }
 
 .search-button {
@@ -641,14 +645,15 @@ body {
   font-size: 20px;
   font-weight: 600;
   color: #212529;
-  margin-bottom: 20px;
+  margin:7px 5px;
 }
 
 .history-actions {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 16px;
+  margin-bottom: 12px;
+  padding-right: 14px;
 }
 
 .clear-history-btn {
@@ -670,10 +675,14 @@ body {
 .history-list {
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 14px;
+  max-height: 368px; /* Adjust to fit about 3 items before scrolling */
+  overflow-y: auto;
+  padding-right: 8px; /* optional: avoids scrollbar overlap */
 }
 
 .history-item {
+  margin-top: 1px;
   padding: 16px;
   border: 1px solid rgba(0, 0, 0, 0.1);
   border-radius: 12px;
@@ -1284,12 +1293,6 @@ body {
 .flight-card:nth-child(2) { animation-delay: 0.2s; }
 .flight-card:nth-child(3) { animation-delay: 0.3s; }
 
-.history-list {
-  max-height: 300px; /* or any fixed height */
-  overflow-y: auto;
-  padding-right: 8px; /* optional: avoids scrollbar overlap */
-}
-
 /* Optional: Add scrollbar styling for better UI */
 .history-list::-webkit-scrollbar {
   width: 6px;
@@ -1298,4 +1301,29 @@ body {
 .history-list::-webkit-scrollbar-thumb {
   background-color: #ccc;
   border-radius: 4px;
+}
+.plane-loader-icon {
+    /* Adjust size to fit your GIF */
+  width: 220px;
+  height: 200px;
+}
+
+/* Plane Loader Animation */
+.plane-loader-container {
+  background-color: #ffffff;
+  display: grid;
+  place-content: center;
+  justify-items: center;
+  gap: 1rem;
+  padding: 40px;
+  width: 100%;
+  height: 400px; /* Give it some space */
+  border-radius: 12px;
+}
+
+.plane-loader-text {
+  /* The 'gap' property on the container now handles spacing */
+  font-size: 1.2rem;
+  color: #495057;
+  font-weight: 500;
 }

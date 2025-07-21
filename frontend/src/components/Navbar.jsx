@@ -14,7 +14,7 @@ function Navbar() {
       <div className="navbar-container">
         <div className="navbar-brand">
           <Plane size={28} />
-          <h1>Flight Finder</h1>
+          <h1>FairFly</h1>
         </div>
         
         <div className="navbar-actions">

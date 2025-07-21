@@ -39,13 +39,12 @@ function LoginPage() {
             <div className="logo">
               <Plane size={32} />
             </div>
-            <h1>Flight Finder</h1>
+            <h1>FairFly</h1>
             <p>Find the cheapest flights worldwide</p>
           </div>
 
           <form onSubmit={handleSubmit} className="login-form">
             <div className="form-group">
-              <label htmlFor="email">Email Address</label>
               <div className="input-wrapper">
                 <Mail className="input-icon" size={20} />
                 <input
@@ -60,7 +59,6 @@ function LoginPage() {
             </div>
 
             <div className="form-group">
-              <label htmlFor="password">Password</label>
               <div className="input-wrapper">
                 <Lock className="input-icon" size={20} />
                 <input
