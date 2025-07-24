@@ -54,18 +54,34 @@ cd server
 npm install
 ```
 
-Next, create a `.env` file in the `server` directory. This file will store your environment variables.
+Next, create a `flightApi.env` file in the `server` directory by copying the example file and filling in your actual values.
 
-**`server/.env`**
+**`server/flightApi.env`**
 
-```env
-PORT=5000
-MONGO_URI=your_mongodb_connection_string_here
-JWT_SECRET=a_very_strong_and_secret_key_for_jwt
+```bash
+# Copy the example file
+cp .env.example flightApi.env
 ```
 
-- `MONGO_URI`: Your connection string for your local or cloud MongoDB instance.
-- `JWT_SECRET`: A secret key used to sign the authentication tokens.
+```env
+# Amadeus API Configuration
+AMADEUS_API_KEY=your_amadeus_api_key_here
+AMADEUS_API_SECRET=your_amadeus_api_secret_here
+
+# Database Configuration
+MONGODB_URI=mongodb://localhost:27017/flight-search-app
+
+# Server Configuration
+PORT=5001
+
+# JWT Secret for authentication tokens
+JWT_SECRET=your_jwt_secret_key_here
+```
+
+- `AMADEUS_API_KEY` & `AMADEUS_API_SECRET`: Get these from [Amadeus for Developers](https://developers.amadeus.com/)
+- `MONGODB_URI`: Your connection string for your local or cloud MongoDB instance
+- `JWT_SECRET`: Generate a strong secret key using: `node -e "console.log(require('crypto').randomBytes(64).toString('hex'))"`
+- `PORT`: The port your server will run on (default: 5001)
 
 ### 3. Frontend Setup
 
@@ -77,6 +93,19 @@ cd frontend
 
 # Install dependencies
 npm install
+
+# Create environment file
+cp .env.example .env
+```
+
+Update the frontend `.env` file with your backend URL:
+
+```env
+# For development
+VITE_API_URL=http://localhost:5001/api
+
+# For production
+# VITE_API_URL=https://your-backend-domain.com/api
 ```
 
 Next, create a `.env` file in the `frontend` directory to tell your React app where the backend API is located.

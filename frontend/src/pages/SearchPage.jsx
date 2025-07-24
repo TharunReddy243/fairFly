@@ -29,12 +29,16 @@ function SearchPage() {
   const [serverHistory, setServerHistory] = useState([]);
   
   const navigate = useNavigate();
-  const { username } = useAuth();
+  const { username, token } = useAuth();
 
   // --- DATA FETCHING & SIDE EFFECTS ---
   const refetchHistory = useCallback(() => {
-    if (!username) return;
-    fetch(`http://localhost:5000/api/search-history?username=${encodeURIComponent(username)}`)
+    if (!username || !token) return;
+    fetch(`${import.meta.env.VITE_API_URL}/search-history?username=${encodeURIComponent(username)}`, {
+      headers: {
+        'Authorization': `Bearer ${token}`
+      }
+    })
       .then(res => res.json())
       .then(data => Array.isArray(data) ? setServerHistory(data) : setServerHistory([]))
       .catch(() => setServerHistory([]));
@@ -75,9 +79,12 @@ function SearchPage() {
 
       if (!isFromHistory) {
         try {
-          const res = await fetch('http://localhost:5000/api/store-search', {
+          const res = await fetch(`${import.meta.env.VITE_API_URL}/store-search`, {
             method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
+            headers: { 
+              'Content-Type': 'application/json',
+              'Authorization': `Bearer ${localStorage.getItem('token')}`
+            },
             body: JSON.stringify({ tripType, segments: validSegments, username, passengers, class: flightClass, stops })
           });
           if (res.ok) refetchHistory();
@@ -108,9 +115,12 @@ function SearchPage() {
 
       if (!isFromHistory) {
         try {
-          const res = await fetch('http://localhost:5000/api/store-search', {
+          const res = await fetch(`${import.meta.env.VITE_API_URL}/store-search`, {
             method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
+            headers: { 
+              'Content-Type': 'application/json',
+              'Authorization': `Bearer ${localStorage.getItem('token')}`
+            },
             body: JSON.stringify({ ...searchParams, username })
           });
           if (res.ok) refetchHistory();
@@ -154,9 +164,12 @@ function SearchPage() {
     if (!username || serverHistory.length === 0) return;
     if (window.confirm('Are you sure you want to clear your recent searches?')) {
       try {
-        const response = await fetch('http://localhost:5000/api/search-history/clear', {
+        const response = await fetch(`${import.meta.env.VITE_API_URL}/clear-history`, {
           method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
+          headers: { 
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${localStorage.getItem('token')}`
+          },
           body: JSON.stringify({ username }),
         });
         if (response.ok) {

@@ -1,9 +1,10 @@
 const mongoose = require('mongoose');
-require('dotenv').config({ path: './flightApi.env' });
+const path = require('path');
+require('dotenv').config({ path: path.join(__dirname, '..', 'flightApi.env') });
 
 const connectDB = async () => {
   try {
-    await mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost:27017/mini2', {
+    await mongoose.connect(process.env.MONGODB_URI, {
       useNewUrlParser: true, // these are deprecated in Mongoose 6+ but might be needed for your version
       useUnifiedTopology: true,
     });

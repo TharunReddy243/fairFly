@@ -6,7 +6,33 @@ const Search = require('../models/Search');
 exports.searchFlights = async (req, res) => {
   const { origin, destination, departureDate, returnDate, tripType, segments, adults, cabinClass } = req.body;
 
+  // Validate required fields
+  if (!tripType) {
+    return res.status(400).json({ error: 'Trip type is required' });
+  }
+
+  if (tripType !== 'multiCity' && (!origin || !destination || !departureDate)) {
+    return res.status(400).json({ error: 'Origin, destination, and departure date are required for one-way/return trips' });
+  }
+
+  if (tripType === 'return' && !returnDate) {
+    return res.status(400).json({ error: 'Return date is required for return trips' });
+  }
+
   try {
+    console.log('Search params:', { origin, destination, departureDate, returnDate, tripType, adults, cabinClass });
+    
+    // Validate Amadeus configuration
+    if (!amadeus.client) {
+      console.error('Amadeus client not properly initialized');
+      return res.status(500).json({ error: 'Flight search service configuration error' });
+    }
+
+    // Add proper error handling for API issues
+    process.on('unhandledRejection', (reason, promise) => {
+      console.error('Unhandled Rejection at:', promise, 'reason:', reason);
+    });
+
     // --- Multi-City Flight Search ---
     if (tripType === 'multiCity') {
       const multiCityResponses = [];
@@ -46,8 +72,11 @@ exports.searchFlights = async (req, res) => {
       max: 30,
     };
 
+    console.log('Searching with params:', searchParams);
+
     if (tripType === 'return' && returnDate) {
       searchParams.returnDate = returnDate;
+      console.log('Added return date:', returnDate);
     }
 
     if (cabinClass && cabinClass.toUpperCase() !== 'ANY') {
@@ -78,8 +107,9 @@ exports.searchFlights = async (req, res) => {
 };
 
 exports.storeSearch = async (req, res) => {
-  const { username, from, to, departureDate, returnDate, tripType, segments, passengers, class: flightClass, stops } = req.body;
-  if (!username) return res.status(200).json({ message: 'No user logged in, search not stored.' });
+  // Get username from the authenticated user in the token
+  const { username } = req.user;
+  const { from, to, departureDate, returnDate, tripType, segments, passengers, class: flightClass, stops } = req.body;
   const searchData = { username, tripType, from, to, departureDate, returnDate: returnDate || null, segments: tripType === 'multiCity' ? segments : [], passengers, class: flightClass, stops };
   try {
     const newSearch = new Search(searchData);
@@ -91,8 +121,8 @@ exports.storeSearch = async (req, res) => {
 };
 
 exports.getSearchHistory = async (req, res) => {
-  const { username } = req.query;
-  if (!username) return res.status(400).json({ message: 'Username is required' });
+  // Get username from the authenticated user in the token
+  const { username } = req.user;
   try {
     const searches = await Search.find({ username }).sort({ createdAt: -1 }).limit(10);
     res.json(searches);
@@ -102,8 +132,8 @@ exports.getSearchHistory = async (req, res) => {
 };
 
 exports.clearSearchHistory = async (req, res) => {
-  const { username } = req.body;
-  if (!username) return res.status(400).json({ message: 'Username is required' });
+  // Get username from the authenticated user in the token
+  const { username } = req.user;
   try {
     await Search.deleteMany({ username });
     res.status(200).json({ message: 'Search history cleared successfully' });

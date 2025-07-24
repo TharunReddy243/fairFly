@@ -60,9 +60,12 @@ function ResultsPage() {
       fetchInitiated.current = true;
       setError('');
       try {
-        const response = await fetch('http://localhost:5000/api/flights', {
+        const response = await fetch(`${import.meta.env.VITE_API_URL}/flights`, {
           method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
+          headers: { 
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${localStorage.getItem('token')}`
+          },
           body: JSON.stringify({
             origin: searchParams.from,
             destination: searchParams.to,
